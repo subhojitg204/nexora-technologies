@@ -1,71 +1,72 @@
+
 # NEXORA Technologies
 
 A modern, responsive business website built using React, JavaScript, HTML5 and CSS3.
 
 ## About the Project
 
-NEXORA Technologies is a business website designed to showcase digital services, projects, pricing plans and company information. It provides a clean interface with responsive layouts and interactive features.
+NEXORA Technologies is a business website showcasing digital services, company information, pricing plans and completed projects.
 
 ## Features
 
-- Responsive navigation with mobile menu
-- Home, About, Services, Portfolio, Pricing and Contact pages
+- Six responsive pages: Home, About, Services, Portfolio, Pricing and Contact
 - Dark and light theme toggle
+- Responsive navigation and mobile menu
 - Interactive portfolio filters and project details
 - Testimonials slider
-- FAQ accordion section
+- FAQ accordion
 - Contact form with frontend validation
 - Scroll progress indicator and back-to-top button
-- Responsive layouts using CSS Grid and Flexbox
 - CSS animations and hover effects
 - SEO metadata and accessibility improvements
 
 ## Technologies Used
 
 - React
-- JavaScript (ES6+)
+- JavaScript ES6+
 - HTML5
 - CSS3
 - React Router DOM
 - Vite
 
-## Installation and Setup
+## Installation
 
-1. Clone the repository.
-2. Open the project folder in VS Code.
-3. Install dependencies:
+Install dependencies:
 
-   `npm install`
+```bash
+npm install
+```
 
-4. Start the development server:
+Start development server:
 
-   `npm run dev`
+```bash
+npm run dev
+```
 
-5. Open the local URL displayed in your terminal.
+Create production build:
 
-## Production Build
+```bash
+npm run build
+```
 
-Run:
+Preview production build:
 
-`npm run build`
-
-To preview the production build:
-
-`npm run preview`
+```bash
+npm run preview
+```
 
 ## Project Structure
 
-- `public/` – Static assets and images
-- `src/components/` – Reusable React components
-- `src/pages/` – Website pages
-- `src/styles/` – Stylesheets
-- `lighthouse/` – Performance audit reports
-- `README.md` – Project documentation
+- `public/` - Static assets and images
+- `src/components/` - Reusable React components
+- `src/pages/` - Website pages
+- `lighthouse/` - Performance audit reports
+- `README.md` - Project documentation
 
 ## Performance Testing
 
-Lighthouse reports are stored in the `lighthouse/` directory.
+Lighthouse audit reports are available in the `lighthouse/` folder.
 
-## Contact
+## Project Name
 
-NEXORA Technologies – Digital Solutions and Web Development.
+NEXORA Technologies
