@@ -23,8 +23,33 @@ export default function Contact() {
     setSubmitted(false);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/contact`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to send message');
+    }
 
     setSubmitted(true);
 
@@ -35,7 +60,13 @@ export default function Contact() {
       subject: '',
       message: ''
     });
-  };
+
+  } catch (error) {
+    console.error('Contact form error:', error);
+    setSubmitted(false);
+    alert(error.message || 'Something went wrong. Please try again.');
+  }
+};
 
   return (
     <section className="content-section page-content contact-page">

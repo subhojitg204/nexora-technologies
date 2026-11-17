@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-
+import Admin from "./pages/Admin/Admin.jsx";
+import AdminLogin from "./pages/Admin/AdminLogin.jsx";
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
 
@@ -48,6 +49,8 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
 
