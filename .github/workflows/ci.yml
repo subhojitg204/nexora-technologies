@@ -26,5 +26,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Run Vitest Tests
+        run: npm test
+
       - name: Build Website
         run: npm run build
