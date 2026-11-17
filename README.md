@@ -70,3 +70,22 @@ Lighthouse audit reports are available in the `lighthouse/` folder.
 ## Project Name
 
 NEXORA Technologies
+## Website Screenshots
+
+### Home Page
+![Home Page](docs/screenshots/home.png)
+
+### About Page
+![About Page](docs/screenshots/about.png)
+
+### Services Page
+![Services Page](docs/screenshots/services.png)
+
+### Our Work Page
+![Our Work Page](docs/screenshots/our-work.png)
+
+### Pricing Page
+![Pricing Page](docs/screenshots/pricing.png)
+
+### Contact Page
+![Contact Page](docs/screenshots/contact.png)
