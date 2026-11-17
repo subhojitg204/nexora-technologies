@@ -1,7 +1,7 @@
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 import Contact from '../src/pages/Contact/Contact';
 
 describe('Nexora Technologies Contact Form', () => {
@@ -83,6 +83,18 @@ describe('Nexora Technologies Contact Form', () => {
   });
 
   it('shows success and clears fields after valid submission', async () => {
+   
+const originalFetch = globalThis.fetch;
+
+globalThis.fetch = vi.fn().mockResolvedValue({
+  ok: true,
+  status: 201,
+  json: async () => ({
+    success: true,
+    message: "Message submitted successfully.",
+  }),
+});
+
     const user = userEvent.setup();
     render(<Contact />);
 
@@ -93,14 +105,19 @@ describe('Nexora Technologies Contact Form', () => {
 
     await user.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Thank you! Your message has been submitted.'
-    );
+ 
+expect(
+  await screen.findByRole("status")
+).toHaveTextContent(
+  "Thank you! Your message has been submitted."
+);
+
 
     expect(screen.getByLabelText('Full Name')).toHaveValue('');
     expect(screen.getByLabelText('Email Address')).toHaveValue('');
     expect(screen.getByLabelText('Subject')).toHaveValue('');
     expect(screen.getByLabelText('Your Message')).toHaveValue('');
+    globalThis.fetch = originalFetch;
   });
 
 });
