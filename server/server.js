@@ -18,14 +18,22 @@ app.use(helmet());
 
 // Allow requests from your local React app
 
+
+ // Allow requests from local React and live Vercel website
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 // Parse incoming JSON
 app.use(express.json({ limit: "10kb" }));
@@ -115,7 +123,7 @@ app.post("/api/contact", async (req, res) => {
 
 const ADMIN_COOKIE = "nexora_admin";
 
-app.post("/api/admin/login", async (req, res) => {
+app.post("/api/admin/login", requireTrustedOrigin, async (req, res) => {
   try {
     const loginSchema = z.object({
       email: z.email(),
@@ -171,13 +179,15 @@ app.post("/api/admin/login", async (req, res) => {
       }
     );
 
-    res.cookie(ADMIN_COOKIE, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 1000,
-      path: "/api/admin",
-    });
+   
+res.cookie(ADMIN_COOKIE, token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  maxAge: 60 * 60 * 1000,
+  path: "/api/admin",
+});
+ 
 
     return res.json({
       success: true,
@@ -226,11 +236,11 @@ function requireAdmin(req, res, next) {
   }
 }
 
-app.post("/api/admin/logout", (req, res) => {
+app.post("/api/admin/logout", requireTrustedOrigin, (req, res) => {
   res.clearCookie(ADMIN_COOKIE, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     path: "/api/admin",
   });
 
@@ -263,7 +273,26 @@ app.get("/api/admin/messages", requireAdmin, async (req, res) => {
   }
 });
 
-app.patch("/api/admin/messages/:id/status", requireAdmin, async (req, res) => {
+function requireTrustedOrigin(req, res, next) {
+  const origin = req.get("Origin");
+
+  const trustedOrigins = [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL,
+  ].filter(Boolean);
+
+  if (!origin || !trustedOrigins.includes(origin)) {
+    return res.status(403).json({
+      success: false,
+      message: "Request origin not allowed.",
+    });
+  }
+
+  next();
+}
+
+app.patch("/api/admin/messages/:id/status", requireTrustedOrigin, requireAdmin, async (req, res) => {
+
   try {
     const id = Number(req.params.id);
     const { status } = req.body;
