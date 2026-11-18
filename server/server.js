@@ -12,6 +12,7 @@ const { z } = require("zod");
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5000;
 
 // Security middleware
@@ -495,7 +496,7 @@ app.post("/api/users/login", userLoginLimiter, async (req, res) => {
     res.cookie("nexora_user_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 2 * 60 * 60 * 1000,
       path: "/",
     });
@@ -610,7 +611,7 @@ app.post("/api/users/logout", requireTrustedOrigin, (req, res) => {
   res.clearCookie("nexora_user_token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   });
 
@@ -851,7 +852,7 @@ if (
 res.clearCookie("nexora_user_token", {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   path: "/",
 });
 
