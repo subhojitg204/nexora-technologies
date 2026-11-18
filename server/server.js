@@ -7,6 +7,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const { z } = require("zod");
 
 dotenv.config();
 
@@ -66,8 +67,6 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-
-const { z } = require("zod");
 
 // Validate contact form submissions
 const contactSchema = z.object({
@@ -342,6 +341,538 @@ app.patch("/api/admin/messages/:id/status", requireTrustedOrigin, requireAdmin, 
     });
   }
 });
+
+// ======================================================
+// NEXORA USER REGISTRATION API
+// ======================================================
+
+const userRegistrationSchema = z.object({
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().email().max(255).toLowerCase(),
+  password: z.string().min(8).max(128),
+});
+
+const userRegistrationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many registration attempts. Try again later.",
+  },
+});
+
+app.post(
+  "/api/users/register",
+  userRegistrationLimiter,
+  async (req, res) => {
+    try {
+      const parsed = userRegistrationSchema.safeParse(req.body);
+
+      if (!parsed.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Please enter valid registration details.",
+        });
+      }
+
+      const { name, email, password } = parsed.data;
+
+      const passwordHash = await bcrypt.hash(password, 12);
+
+      const result = await pool.query(
+        `INSERT INTO users (name, email, password_hash, role)
+         VALUES ($1, $2, $3, 'USER')
+         ON CONFLICT (email) DO NOTHING
+         RETURNING id, name, email, role`,
+        [name, email, passwordHash]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(409).json({
+          success: false,
+          message: "An account with this email already exists.",
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: "Account created successfully.",
+        user: result.rows[0],
+      });
+
+    } catch (error) {
+      console.error("User registration failed:", error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to create account right now.",
+      });
+    }
+  }
+);
+
+// ======================================================
+// END USER REGISTRATION API
+// ======================================================
+
+// ======================================================
+// NEXORA USER LOGIN API
+// ======================================================
+
+const userLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many login attempts. Try again later.",
+  },
+});
+
+app.post("/api/users/login", userLoginLimiter, async (req, res) => {
+  try {
+    const { email, password } = req.body || {};
+
+    if (
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !email.trim() ||
+      !password
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required.",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const result = await pool.query(
+      `SELECT id, name, email, password_hash, role, session_version
+       FROM users
+       WHERE email = $1
+       LIMIT 1`,
+      [normalizedEmail]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
+
+    const user = result.rows[0];
+
+    const passwordMatches = await bcrypt.compare(
+      password,
+      user.password_hash
+    );
+
+    if (!passwordMatches) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
+
+    // Create a signed login session
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+        type: "user",
+        sessionVersion: user.session_version,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+    // Store token in a secure HttpOnly cookie
+    res.cookie("nexora_user_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 2 * 60 * 60 * 1000,
+      path: "/",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful.",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("User login failed:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to login right now.",
+    });
+  }
+});
+
+// ======================================================
+// END USER LOGIN API
+// ======================================================
+
+// ======================================================
+// NEXORA - VERIFY USER SESSION
+// ======================================================
+
+app.get("/api/users/me", async (req, res) => {
+  try {
+    const token = req.cookies?.nexora_user_token;
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Please login to continue.",
+      });
+    }
+
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message: "Your session has expired. Please login again.",
+      });
+    }
+
+    if (
+      decoded.type !== "user" ||
+      !Number.isInteger(decoded.id)
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid user session.",
+      });
+    }
+
+    const result = await pool.query(
+      `SELECT id, name, email, role, session_version
+       FROM users
+       WHERE id = $1 AND role = 'USER'
+       LIMIT 1`,
+      [decoded.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "User account not found.",
+      });
+    }
+
+if (
+  decoded.sessionVersion !== result.rows[0].session_version
+) {
+  return res.status(401).json({
+    success: false,
+    message: "Session expired. Please login again.",
+  });
+}
+
+    return res.status(200).json({
+      success: true,
+      user: result.rows[0],
+    });
+  } catch (error) {
+    console.error("User session verification failed:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to verify your session.",
+    });
+  }
+});
+
+// ======================================================
+// END VERIFY USER SESSION
+// ======================================================
+
+// ======================================================
+// NEXORA USER LOGOUT API
+// ======================================================
+
+app.post("/api/users/logout", requireTrustedOrigin, (req, res) => {
+  res.clearCookie("nexora_user_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully.",
+  });
+});
+
+// ======================================================
+// END USER LOGOUT API
+// ======================================================
+
+// ======================================================
+// NEXORA - UPDATE USER PROFILE API
+// ======================================================
+
+const updateProfileLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+});
+
+app.patch(
+  "/api/users/profile",
+  updateProfileLimiter,
+  requireTrustedOrigin,
+  async (req, res) => {
+    try {
+      // Step 1: Verify user login session
+      const token = req.cookies?.nexora_user_token;
+
+      if (!token) {
+        return res.status(401).json({
+          success: false,
+          message: "Please login to update your profile.",
+        });
+      }
+
+      let decoded;
+
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+      } catch {
+        return res.status(401).json({
+          success: false,
+          message: "Session expired. Please login again.",
+        });
+      }
+
+      if (
+        decoded.type !== "user" ||
+        !Number.isInteger(decoded.id)
+      ) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid user session.",
+        });
+      }
+
+      // Step 2: Validate new name
+      const profileSchema = z.object({
+        name: z.string().trim().min(2).max(100),
+      }).strict();
+
+      const parsed = profileSchema.safeParse(req.body);
+
+      if (!parsed.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Name must contain 2 to 100 characters.",
+        });
+      }
+
+      // Step 3: Update only the logged-in user's profile
+      
+const result = await pool.query(
+  `UPDATE users
+   SET name = $1
+   WHERE id = $2
+     AND role = 'USER'
+     AND session_version = $3
+   RETURNING id, name, email, role`,
+  [
+    parsed.data.name,
+    decoded.id,
+    decoded.sessionVersion,
+  ]
+);
+
+
+      if (result.rowCount === 0) {
+        return res.status(401).json({
+          success: false,
+          message: "Session expired. Please login again.",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Profile updated successfully.",
+        user: result.rows[0],
+      });
+    } catch (error) {
+      console.error("Profile update failed:", error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to update profile right now.",
+      });
+    }
+  }
+);
+
+// ======================================================
+// END UPDATE USER PROFILE API
+// ======================================================
+
+ // =========================================
+ // NEXORA - CHANGE USER PASSWORD API
+ // =========================================
+
+ const changePasswordLimiter = rateLimit({
+   windowMs: 15 * 60 * 1000,
+   limit: 10,
+   standardHeaders: "draft-7",
+   legacyHeaders: false,
+ });
+
+ app.patch(
+   "/api/users/change-password",
+   changePasswordLimiter,
+   requireTrustedOrigin,
+   async (req, res) => {
+     try {
+       const token = req.cookies?.nexora_user_token;
+
+       if (!token) {
+         return res.status(401).json({
+           success: false,
+           message: "Please login first.",
+         });
+       }
+
+       let decoded;
+
+       try {
+         decoded = jwt.verify(token, process.env.JWT_SECRET);
+       } catch {
+         return res.status(401).json({
+           success: false,
+           message: "Session expired. Please login again.",
+         });
+       }
+
+       if (
+         decoded.type !== "user" ||
+         !Number.isInteger(decoded.id)
+       ) {
+         return res.status(401).json({
+           success: false,
+           message: "Invalid user session.",
+         });
+       }
+
+       const passwordSchema = z.object({
+         currentPassword: z.string().min(1),
+         newPassword: z.string().min(8).max(128),
+       }).strict();
+
+       const parsed = passwordSchema.safeParse(req.body);
+
+       if (!parsed.success) {
+         return res.status(400).json({
+           success: false,
+           message: "New password must be 8 to 128 characters.",
+         });
+       }
+
+       const { currentPassword, newPassword } = parsed.data;
+
+       const result = await pool.query(
+         `SELECT id, password_hash, session_version
+          FROM users
+          WHERE id = $1 AND role = 'USER'`,
+         [decoded.id]
+       );
+
+       if (result.rowCount === 0) {
+         return res.status(404).json({
+           success: false,
+           message: "User account not found.",
+         });
+       }
+
+if (
+  decoded.sessionVersion !== result.rows[0].session_version
+) {
+  return res.status(401).json({
+    success: false,
+    message: "Session expired. Please login again.",
+  });
+}
+
+       const passwordMatches = await bcrypt.compare(
+         currentPassword,
+         result.rows[0].password_hash
+       );
+
+       if (!passwordMatches) {
+         return res.status(400).json({
+           success: false,
+           message: "Current password is incorrect.",
+         });
+       }
+
+       if (currentPassword === newPassword) {
+         return res.status(400).json({
+           success: false,
+           message: "New password must be different.",
+         });
+       }
+
+       const newPasswordHash = await bcrypt.hash(
+         newPassword,
+         12
+       );
+
+       await pool.query(
+         `UPDATE users
+         SET password_hash = $1,
+    session_version = session_version + 1
+          WHERE id = $2 AND role = 'USER'`,
+         [newPasswordHash, decoded.id]
+       );
+
+res.clearCookie("nexora_user_token", {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+});
+
+       return res.status(200).json({
+         success: true,
+         message: "Password changed successfully.",
+       });
+     } catch (error) {
+       console.error("Change password failed:", error.message);
+
+       return res.status(500).json({
+         success: false,
+         message: "Unable to change password right now.",
+       });
+     }
+   }
+ );
+
+ // =========================================
+ // END CHANGE USER PASSWORD API
+ // =========================================
 
 // Handle unknown routes
 app.use((req, res) => {

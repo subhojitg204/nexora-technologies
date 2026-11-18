@@ -42,6 +42,21 @@ export default function Header({ darkMode, onToggleTheme }) {
         <NavLink to="/portfolio" onClick={closeMenu}>Our Work</NavLink>
         <NavLink to="/pricing" onClick={closeMenu}>Pricing</NavLink>
         <NavLink to="/contact" onClick={closeMenu}>Contact</NavLink>
+      <NavLink
+  to="/login"
+  onClick={closeMenu}
+  className="login-btn user-login-btn"
+>
+  User Login
+</NavLink>
+
+<NavLink
+  to="/admin/login"
+  onClick={closeMenu}
+  className="login-btn admin-login-btn"
+>
+  Admin Login
+</NavLink>
       </nav>
 
       {/* Theme Toggle Button */}

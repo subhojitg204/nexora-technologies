@@ -1,3 +1,6 @@
+import UserLogin from "./pages/User/UserLogin";
+import UserRegister from "./pages/User/UserRegister";
+import UserDashboard from "./pages/User/UserDashboard";
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Admin from "./pages/Admin/Admin.jsx";
@@ -49,15 +52,18 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<UserLogin />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/register" element={<UserRegister />} />
         </Routes>
       </main>
 
       <Footer />
 
     </div>
-  );
+  )
 }
 
 export default App;
