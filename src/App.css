@@ -2488,3 +2488,1608 @@ button:hover,
     text-align: center;
   }
 }
+
+/* ====================================
+   NEXORA SMART NAVBAR BACK BUTTON
+==================================== */
+
+.app .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.app .navbar-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease,
+              transform 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.app .navbar-back-btn svg {
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.app .navbar-back-btn:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  transform: translateX(-3px);
+}
+
+.app .navbar-back-btn:hover svg {
+  color: #ffffff;
+}
+
+.app .navbar-back-btn:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 4px;
+}
+
+/* Keep navigation compact */
+
+.app .navbar {
+  gap: 18px;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+.app .nav-links {
+  gap: clamp(10px, 1.3vw, 25px);
+}
+
+/* Responsive navbar */
+
+@media (max-width: 1200px) {
+
+  .app .navbar {
+    position: sticky;
+    top: 0;
+  }
+
+  .app .menu-toggle {
+    display: block;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .app .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .app .nav-links.nav-open {
+    display: flex;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+}
+
+/* Mobile Back Button */
+
+@media (max-width: 600px) {
+
+  .app .navbar-brand {
+    gap: 10px;
+  }
+
+  .app .navbar-back-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .app .navbar-back-btn span {
+    display: none;
+  }
+
+  .app .navbar {
+    gap: 10px;
+  }
+
+  .app .navbar .logo {
+    font-size: 20px;
+  }
+
+  .app .navbar .menu-toggle {
+    margin-right: 0;
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app .navbar-back-btn {
+    transition: none;
+  }
+
+  .app .navbar-back-btn:hover {
+    transform: none;
+  }
+}
+
+/* =========================================
+   NEXORA PREMIUM GLASSMORPHISM NAVBAR
+========================================= */
+
+/* Dark glass background */
+
+.app.dark .navbar {
+  background: rgba(16, 17, 32, 0.85);
+  border-bottom: 1px solid rgba(139, 120, 255, 0.15);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Light glass background */
+
+.app.light .navbar {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(114, 85, 237, 0.12);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Premium sticky navbar */
+
+.app .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Premium brand logo */
+
+.app .navbar .logo {
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.app .navbar .logo span {
+  color: var(--accent-color);
+}
+
+.app .navbar .logo:hover {
+  opacity: 0.8;
+}
+
+/* Navigation links */
+
+.app .nav-links a:not(.login-btn) {
+  position: relative;
+  padding: 10px 0;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Animated underline */
+
+.app .nav-links a:not(.login-btn)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 10px;
+  background: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.app .nav-links a:not(.login-btn):hover::after,
+.app .nav-links a:not(.login-btn).active::after {
+  width: 100%;
+}
+
+.app .nav-links a.active {
+  color: var(--accent-color);
+}
+
+/* Premium user login button */
+
+.app .nav-links .user-login-btn {
+  background: linear-gradient(135deg, #7255ed, #5541cc);
+  border: 1px solid transparent;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  white-space: nowrap;
+  box-shadow: 0 5px 15px rgba(114, 85, 237, 0.2);
+}
+
+.app .nav-links .user-login-btn:hover {
+  background: linear-gradient(135deg, #6548df, #4935bc);
+  color: #ffffff;
+  transform: translateY(-3px);
+}
+
+/* Premium admin login button */
+
+.app .nav-links .admin-login-btn {
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+
+.app .nav-links .admin-login-btn:hover {
+  background: #6548df;
+  color: #ffffff;
+}
+
+/* Theme toggle */
+
+.app .theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-bg);
+}
+
+.app .theme-toggle:hover {
+  border-color: var(--accent-color);
+}
+
+/* Keyboard accessibility */
+
+.app .navbar a:focus-visible,
+.app .navbar button:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 4px;
+}
+
+/* Responsive glass menu */
+
+@media (max-width: 1200px) {
+  .app .nav-links {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .app .nav-links.nav-open {
+    padding: 25px;
+    gap: 12px;
+  }
+
+  .app .nav-links a:not(.login-btn) {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .app .nav-links a:not(.login-btn)::after {
+    display: none;
+  }
+
+  .app .nav-links a:not(.login-btn).active {
+    background: rgba(139, 120, 255, 0.12);
+    border-radius: 10px;
+  }
+}
+
+/* Small mobile screens */
+
+@media (max-width: 600px) {
+  .app .navbar .logo {
+    font-size: 20px;
+    letter-spacing: 1.5px;
+  }
+
+  .app .theme-toggle {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .app .navbar *,
+  .app .navbar *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .app .navbar a:hover,
+  .app .navbar button:hover {
+    transform: none;
+  }
+}
+
+/* =========================================
+   NEXORA PREMIUM MOBILE NAVIGATION
+========================================= */
+
+@media (max-width: 1200px) {
+
+  /* Premium hamburger button */
+
+  .app .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .app .menu-toggle:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
+
+  .app .menu-toggle[aria-expanded="true"] {
+    background: #6548df;
+    color: #ffffff;
+    transform: rotate(90deg);
+  }
+
+  /* Premium dropdown menu */
+
+  .app .nav-links.nav-open {
+    top: calc(100% + 10px);
+    left: 4%;
+    width: 92%;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--bg-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: mobileMenuReveal 0.35s ease both;
+  }
+
+  /* Navigation items */
+
+  .app .nav-links a:not(.login-btn) {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 13px 18px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    text-align: left;
+    transition: all 0.25s ease;
+  }
+
+  .app .nav-links a:not(.login-btn):hover {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--accent-color);
+  }
+
+  /* Active navigation item */
+
+  .app .nav-links a:not(.login-btn).active {
+    background: rgba(139, 120, 255, 0.12);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
+
+  /* Full width login buttons */
+
+  .app .nav-links .login-btn {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 13px 18px;
+    text-align: center;
+    border-radius: 12px;
+  }
+}
+
+/* Mobile menu opening animation */
+
+@keyframes mobileMenuReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Small mobile screens */
+
+@media (max-width: 600px) {
+  .app .menu-toggle {
+    width: 38px;
+    height: 38px;
+    font-size: 19px;
+  }
+
+  .app .nav-links.nav-open {
+    padding: 15px;
+    border-radius: 16px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .app .nav-links.nav-open {
+    animation: none;
+  }
+
+  .app .menu-toggle {
+    transition: none;
+    transform: none;
+  }
+
+  .app .menu-toggle[aria-expanded="true"] {
+    transform: none;
+  }
+}
+
+/* =========================================
+   NEXORA FUTURISTIC TECH NAVBAR
+========================================= */
+
+.app.dark {
+  --nav-neon: #00d9ff;
+  --nav-purple: #8b5cf6;
+  --nav-glass: rgba(8, 11, 23, 0.94);
+  --nav-glow: rgba(0, 217, 255, 0.18);
+}
+
+.app.light {
+  --nav-neon: #036b93;
+  --nav-purple: #6942d8;
+  --nav-glass: rgba(255, 255, 255, 0.94);
+  --nav-glow: rgba(105, 66, 216, 0.12);
+}
+
+/* Futuristic glass navbar */
+
+.app .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--nav-glass);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-bottom: 1px solid var(--nav-purple);
+  box-shadow: 0 5px 30px var(--nav-glow);
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+/* Animated neon bottom border */
+
+.app .navbar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    #00d9ff,
+    #7957ff,
+    #d946ef,
+    #00d9ff
+  );
+  background-size: 300% 100%;
+  animation: nexoraNeonFlow 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes nexoraNeonFlow {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 300% 50%;
+  }
+}
+
+/* Futuristic brand logo */
+
+.app .navbar .logo {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--nav-neon),
+    var(--nav-purple)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.app .navbar .logo span {
+  color: var(--nav-neon);
+}
+
+/* Navigation links */
+
+.app .nav-links a:not(.login-btn) {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease,
+              text-shadow 0.3s ease;
+}
+
+.app .nav-links a:not(.login-btn):hover,
+.app .nav-links a:not(.login-btn).active {
+  color: var(--nav-neon);
+  text-shadow: 0 0 14px var(--nav-glow);
+}
+
+.app .nav-links a:not(.login-btn)::after {
+  background: linear-gradient(
+    90deg,
+    var(--nav-neon),
+    var(--nav-purple)
+  );
+  box-shadow: 0 0 10px var(--nav-glow);
+}
+
+/* Futuristic Back Button */
+
+.app .navbar-back-btn {
+  background: var(--nav-glow);
+  border: 1px solid var(--nav-neon);
+  color: var(--nav-neon);
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--nav-glow);
+}
+
+.app .navbar-back-btn svg {
+  color: var(--nav-neon);
+}
+
+.app .navbar-back-btn:hover {
+  background: var(--nav-neon);
+  border-color: var(--nav-neon);
+  color: var(--bg-color);
+  box-shadow: 0 0 20px var(--nav-glow);
+}
+
+.app .navbar-back-btn:hover svg {
+  color: var(--bg-color);
+}
+
+/* Neon User Login */
+
+.app .nav-links .user-login-btn {
+  background: linear-gradient(
+    135deg,
+    #4338ca,
+    #7c3aed
+  );
+  color: #ffffff;
+  border: 1px solid #8b5cf6;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(124, 58, 237, 0.3);
+  transition: all 0.3s ease;
+}
+
+.app .nav-links .user-login-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #6d28d9
+  );
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Neon Admin Login */
+
+.app .nav-links .admin-login-btn {
+  background: transparent;
+  border: 1px solid var(--nav-neon);
+  color: var(--nav-neon);
+  border-radius: 8px;
+  box-shadow: 0 0 12px var(--nav-glow);
+  transition: all 0.3s ease;
+}
+
+.app .nav-links .admin-login-btn:hover {
+  background: var(--nav-neon);
+  color: var(--bg-color);
+  box-shadow: 0 0 25px var(--nav-glow);
+}
+
+/* Futuristic Theme Toggle */
+
+.app .navbar .theme-toggle {
+  background: var(--nav-glow);
+  border: 1px solid var(--nav-purple);
+  border-radius: 10px;
+  box-shadow: 0 0 12px var(--nav-glow);
+  transition: all 0.3s ease;
+}
+
+.app .navbar .theme-toggle:hover {
+  border-color: var(--nav-neon);
+  transform: rotate(12deg);
+}
+
+/* Futuristic Mobile Menu */
+
+@media (max-width: 1200px) {
+
+  .app .menu-toggle {
+    background: var(--nav-glow);
+    border: 1px solid var(--nav-neon);
+    color: var(--nav-neon);
+    box-shadow: 0 0 12px var(--nav-glow);
+  }
+
+  .app .nav-links.nav-open {
+    background: var(--nav-glass);
+    border: 1px solid var(--nav-purple);
+    box-shadow: 0 10px 40px var(--nav-glow);
+    backdrop-filter: blur(25px);
+  }
+
+  .app .nav-links a:not(.login-btn).active {
+    background: var(--nav-glow);
+    border-color: var(--nav-neon);
+    color: var(--nav-neon);
+  }
+}
+
+@media (max-width: 600px) {
+
+  .app .navbar .logo {
+    font-size: 19px;
+    letter-spacing: 1.5px;
+  }
+
+  .app .navbar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* Keyboard Accessibility */
+
+.app .navbar a:focus-visible,
+.app .navbar button:focus-visible {
+  outline: 3px solid var(--nav-neon);
+  outline-offset: 4px;
+}
+
+/* Reduced Motion */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app .navbar::after {
+    animation: none;
+  }
+
+  .app .navbar *,
+  .app .navbar *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .app .navbar a:hover,
+  .app .navbar button:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   NEXORA CYBER ELITE NAVBAR
+========================================== */
+
+/* THEME VARIABLES */
+
+.app.dark {
+  --elite-bg: rgba(10, 14, 26, 0.92);
+  --elite-border: rgba(148, 163, 184, 0.18);
+  --elite-capsule: rgba(3, 7, 18, 0.65);
+  --elite-text: #f8fafc;
+  --elite-muted: #94a3b8;
+  --elite-accent: #67e8f9;
+  --elite-active: rgba(34, 211, 238, 0.12);
+  --elite-shadow: rgba(0, 0, 0, 0.35);
+}
+
+.app.light {
+  --elite-bg: rgba(255, 255, 255, 0.95);
+  --elite-border: rgba(71, 85, 105, 0.18);
+  --elite-capsule: #f1f5f9;
+  --elite-text: #0f172a;
+  --elite-muted: #475569;
+  --elite-accent: #0369a1;
+  --elite-active: rgba(37, 99, 235, 0.10);
+  --elite-shadow: rgba(15, 23, 42, 0.10);
+}
+
+/* FLOATING GLASS NAVBAR */
+
+.app .navbar.cyber-navbar {
+  position: sticky;
+  top: 12px;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  width: calc(100% - 32px);
+  max-width: 1680px;
+  margin: 12px auto;
+  padding: 12px 18px;
+  box-sizing: border-box;
+
+  background: var(--elite-bg);
+  border: 1px solid var(--elite-border);
+  border-radius: 22px;
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  box-shadow:
+    0 10px 35px var(--elite-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  overflow: visible;
+}
+
+/* ANIMATED ACCENT LINE */
+
+.app .cyber-navbar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 12%;
+  width: 76%;
+  height: 2px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #22d3ee,
+    #6366f1,
+    #a855f7,
+    transparent
+  );
+
+  background-size: 200% 100%;
+  border-radius: 100px;
+  animation: eliteBorderFlow 7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes eliteBorderFlow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+/* BRAND SECTION */
+
+.app .cyber-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.app .cyber-navbar .cyber-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  background: none;
+  color: var(--elite-text);
+  text-decoration: none;
+  letter-spacing: normal;
+}
+
+/* CUSTOM NEXORA LOGO */
+
+.app .cyber-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+
+  background: var(--elite-capsule);
+  border: 1px solid var(--elite-border);
+  border-radius: 13px;
+
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.10);
+  transition: transform 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.app .cyber-logo:hover .cyber-logo-icon {
+  transform: rotate(-6deg);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.25);
+}
+
+.app .cyber-logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.app .cyber-logo-text strong {
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 1.5px;
+  color: var(--elite-text);
+}
+
+.app .cyber-logo-text strong span {
+  color: var(--elite-accent);
+}
+
+.app .cyber-logo-text small {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--elite-muted);
+}
+
+/* PREMIUM BACK BUTTON */
+
+.app .cyber-navbar .navbar-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  flex-shrink: 0;
+
+  background: var(--elite-capsule);
+  border: 1px solid var(--elite-border);
+  border-radius: 11px;
+  color: var(--elite-accent);
+  box-shadow: none;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.app .cyber-navbar .navbar-back-btn svg {
+  color: currentColor;
+}
+
+.app .cyber-navbar .navbar-back-btn:hover {
+  background: var(--elite-active);
+  border-color: var(--elite-accent);
+  color: var(--elite-accent);
+  transform: translateX(-3px);
+}
+
+/* MAIN NAVIGATION */
+
+.app .cyber-navbar .cyber-nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* CAPSULE NAVIGATION */
+
+.app .cyber-nav-capsule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  padding: 5px;
+  background: var(--elite-capsule);
+  border: 1px solid var(--elite-border);
+  border-radius: 50px;
+}
+
+.app .cyber-navbar .nav-links a.cyber-nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 10px 11px;
+  border: 1px solid transparent;
+  border-radius: 50px;
+
+  color: var(--elite-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+  text-shadow: none;
+
+  transition: all 0.3s ease;
+}
+
+.app .cyber-navbar .cyber-nav-item svg {
+  flex-shrink: 0;
+}
+
+.app .cyber-navbar .nav-links a.cyber-nav-item::after {
+  display: none;
+}
+
+.app .cyber-navbar .nav-links a.cyber-nav-item:hover {
+  background: var(--elite-active);
+  color: var(--elite-accent);
+}
+
+.app .cyber-navbar .nav-links a.cyber-nav-item.active {
+  background: var(--elite-active);
+  border: 1px solid var(--elite-border);
+  color: var(--elite-accent);
+
+  box-shadow:
+    inset 0 0 12px rgba(34, 211, 238, 0.05),
+    0 0 12px rgba(34, 211, 238, 0.06);
+}
+
+/* AUTHENTICATION BUTTONS */
+
+.app .cyber-auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.app .cyber-navbar .nav-links .login-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+
+  padding: 11px 13px;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+}
+
+/* USER LOGIN */
+
+.app .cyber-navbar .nav-links .user-login-btn {
+  background: linear-gradient(
+    115deg,
+    #2563eb,
+    #7c3aed
+  );
+
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+}
+
+.app .cyber-navbar .nav-links .user-login-btn:hover {
+  background: linear-gradient(
+    115deg,
+    #1d4ed8,
+    #6d28d9
+  );
+
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.40);
+}
+
+/* ADMIN LOGIN */
+
+.app .cyber-navbar .nav-links .admin-login-btn {
+  background: var(--elite-capsule);
+  color: var(--elite-text);
+  border: 1px solid var(--elite-border);
+  box-shadow: none;
+}
+
+.app .cyber-navbar .nav-links .admin-login-btn:hover {
+  background: var(--elite-active);
+  color: var(--elite-accent);
+  border-color: var(--elite-accent);
+  transform: translateY(-2px);
+}
+
+/* THEME TOGGLE */
+
+.app .cyber-navbar .cyber-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  flex-shrink: 0;
+
+  background: var(--elite-capsule);
+  border: 1px solid var(--elite-border);
+  border-radius: 50%;
+  color: var(--elite-accent);
+  box-shadow: none;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.app .cyber-navbar .cyber-theme-toggle:hover {
+  transform: rotate(18deg);
+  border-color: var(--elite-accent);
+  background: var(--elite-active);
+}
+
+/* DESKTOP MENU BUTTON */
+
+.app .cyber-navbar .cyber-menu-toggle {
+  display: none;
+}
+
+/* TABLET AND MOBILE NAVIGATION */
+
+@media (max-width: 1350px) {
+
+  .app .cyber-navbar .cyber-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+
+    background: var(--elite-capsule);
+    color: var(--elite-accent);
+    border: 1px solid var(--elite-border);
+    border-radius: 12px;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  .app .cyber-navbar .cyber-menu-toggle[aria-expanded="true"] {
+    background: var(--elite-active);
+    color: var(--elite-accent);
+    transform: none;
+  }
+
+  .app .cyber-navbar .cyber-nav-links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .app .cyber-navbar .cyber-nav-links.nav-open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 18px;
+    gap: 16px;
+
+    background: var(--elite-bg);
+    border: 1px solid var(--elite-border);
+    border-radius: 20px;
+    box-shadow: 0 20px 45px var(--elite-shadow);
+
+    max-height: 75vh;
+    overflow-y: auto;
+
+    animation: eliteMenuReveal 0.3s ease both;
+  }
+
+  .app .cyber-nav-capsule {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 16px;
+    background: transparent;
+    padding: 6px;
+    gap: 5px;
+  }
+
+  .app .cyber-navbar .nav-links a.cyber-nav-item {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    padding: 14px 16px;
+    border-radius: 11px;
+    font-size: 14px;
+  }
+
+  .app .cyber-auth-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app .cyber-navbar .nav-links .login-btn {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+@keyframes eliteMenuReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* SMALL MOBILE SCREENS */
+
+@media (max-width: 600px) {
+
+  .app .navbar.cyber-navbar {
+    top: 8px;
+    width: calc(100% - 16px);
+    margin: 8px auto;
+    padding: 10px;
+    border-radius: 16px;
+    gap: 7px;
+  }
+
+  .app .cyber-navbar .navbar-brand {
+    gap: 6px;
+  }
+
+  .app .cyber-navbar .cyber-logo {
+    gap: 6px;
+  }
+
+  .app .cyber-logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+
+  .app .cyber-logo-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .app .cyber-logo-text strong {
+    font-size: 15px;
+    letter-spacing: 0.8px;
+  }
+
+  .app .cyber-logo-text small {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+
+  .app .cyber-navbar .navbar-back-btn,
+  .app .cyber-navbar .cyber-menu-toggle,
+  .app .cyber-navbar .cyber-theme-toggle {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* KEYBOARD ACCESSIBILITY */
+
+.app .cyber-navbar a:focus-visible,
+.app .cyber-navbar button:focus-visible {
+  outline: 2px solid var(--elite-accent);
+  outline-offset: 3px;
+}
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app .cyber-navbar *,
+  .app .cyber-navbar::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .app .cyber-navbar a:hover,
+  .app .cyber-navbar button:hover,
+  .app .cyber-logo:hover .cyber-logo-icon {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   NEXORA SMART SCROLL NAVBAR
+========================================== */
+
+.app .navbar.cyber-navbar {
+  transition:
+    background 0.3s ease,
+    padding 0.3s ease,
+    border-radius 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Compact navbar on scroll */
+
+.app .navbar.cyber-navbar.navbar-scrolled {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 17px;
+
+  box-shadow:
+    0 10px 35px var(--elite-shadow),
+    0 0 20px rgba(99, 102, 241, 0.10);
+}
+
+/* Dark mode scroll background */
+
+.app.dark .navbar.cyber-navbar.navbar-scrolled {
+  background: rgba(8, 12, 23, 0.97);
+}
+
+/* Light mode scroll background */
+
+.app.light .navbar.cyber-navbar.navbar-scrolled {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+/* Logo animation */
+
+.app .cyber-navbar .cyber-logo-icon {
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    transform 0.3s ease;
+}
+
+.app .cyber-navbar.navbar-scrolled .cyber-logo-icon {
+  width: 38px;
+  height: 38px;
+}
+
+.app .cyber-navbar.navbar-scrolled .cyber-logo-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+/* Hide previous decorative bottom line */
+
+.app .cyber-navbar::after {
+  display: none;
+}
+
+/* Scroll progress track */
+
+.app .cyber-scroll-track {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  height: 3px;
+  background: var(--elite-border);
+  border-radius: 50px;
+  pointer-events: none;
+}
+
+/* Gradient progress indicator */
+
+.app .cyber-scroll-progress {
+  height: 100%;
+  max-width: 100%;
+  border-radius: 50px;
+
+  background: linear-gradient(
+    90deg,
+    #22d3ee,
+    #3b82f6,
+    #6366f1,
+    #a855f7
+  );
+
+  box-shadow:
+    0 0 10px rgba(34, 211, 238, 0.4);
+
+  transition: width 0.1s linear;
+}
+
+/* Mobile optimization */
+
+@media (max-width: 600px) {
+
+  .app .navbar.cyber-navbar.navbar-scrolled {
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  .app .cyber-navbar.navbar-scrolled .cyber-logo-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .app .cyber-navbar.navbar-scrolled .cyber-logo-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .app .cyber-scroll-track {
+    height: 2px;
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app .navbar.cyber-navbar,
+  .app .cyber-navbar .cyber-logo-icon,
+  .app .cyber-scroll-progress {
+    transition: none !important;
+  }
+}
+
+/* ==========================================
+   NEXORA CYBER ELITE ADVANCED MOBILE MENU
+========================================== */
+
+/* Hide mobile elements on desktop */
+
+.app .cyber-mobile-label,
+.app .cyber-mobile-arrow,
+.app .cyber-menu-backdrop {
+  display: none;
+}
+
+@media (max-width: 1350px) {
+
+  /* Mobile menu backdrop */
+
+  .app .cyber-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: -100vh -100vw;
+    background: rgba(2, 6, 23, 0.55);
+    z-index: -1;
+    cursor: pointer;
+  }
+
+  /* Premium navigation panel */
+
+  .app .cyber-navbar .cyber-nav-links.nav-open {
+    top: calc(100% + 10px);
+    padding: 20px;
+    gap: 12px;
+
+    max-height: 78vh;
+    max-height: 78dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    background: var(--bg-color);
+    border: 1px solid var(--elite-border);
+    border-radius: 22px;
+
+    box-shadow:
+      0 25px 60px var(--elite-shadow),
+      0 0 25px rgba(99, 102, 241, 0.08);
+
+    animation: cyberPanelReveal 0.3s ease both;
+  }
+
+  /* Section headings */
+
+  .app .cyber-mobile-label {
+    display: block;
+    margin: 5px 3px;
+    color: var(--elite-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  /* Navigation container */
+
+  .app .cyber-nav-capsule {
+    padding: 0;
+    border: none;
+    background: transparent;
+    gap: 8px;
+  }
+
+  /* Premium navigation cards */
+
+  .app .cyber-navbar .nav-links a.cyber-nav-item {
+    min-height: 48px;
+    padding: 14px 16px;
+    gap: 13px;
+
+    background: var(--elite-capsule);
+    border: 1px solid var(--elite-border);
+    border-radius: 13px;
+
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .app .cyber-navbar .nav-links a.cyber-nav-item.active {
+    background: var(--elite-active);
+    color: var(--elite-accent);
+    border-color: var(--elite-accent);
+  }
+
+  /* Navigation arrows */
+
+  .app .cyber-mobile-arrow {
+    display: block;
+    margin-left: auto;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .app .cyber-nav-item:hover .cyber-mobile-arrow {
+    color: var(--elite-accent);
+    transform: translateX(3px);
+  }
+
+  /* Account buttons */
+
+  .app .cyber-auth-buttons {
+    gap: 10px;
+  }
+
+  .app .cyber-navbar .nav-links .login-btn {
+    min-height: 48px;
+    padding: 14px;
+    border-radius: 13px;
+    gap: 10px;
+  }
+
+  /* Better touch targets */
+
+  .app .cyber-navbar .cyber-menu-toggle,
+  .app .cyber-navbar .cyber-theme-toggle,
+  .app .cyber-navbar .navbar-back-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Custom scrollbar */
+
+  .app .cyber-nav-links {
+    scrollbar-width: thin;
+    scrollbar-color:
+      var(--elite-accent) transparent;
+  }
+}
+
+/* Panel animation */
+
+@keyframes cyberPanelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Small mobile devices */
+
+@media (max-width: 600px) {
+
+  .app .cyber-navbar .cyber-nav-links.nav-open {
+    padding: 14px;
+    border-radius: 18px;
+    max-height: 75vh;
+    max-height: 75dvh;
+  }
+
+  .app .cyber-navbar .nav-links a.cyber-nav-item {
+    padding: 12px 14px;
+  }
+}
+
+/* Extra small mobile devices */
+
+@media (max-width: 360px) {
+
+  .app .cyber-logo-icon {
+    display: none;
+  }
+
+  .app .navbar.cyber-navbar {
+    gap: 5px;
+  }
+
+  .app .cyber-logo-text strong {
+    font-size: 14px;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app .cyber-navbar .cyber-nav-links.nav-open {
+    animation: none;
+  }
+
+  .app .cyber-mobile-arrow {
+    transition: none;
+    transform: none !important;
+  }
+}
